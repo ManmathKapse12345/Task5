@@ -1,22 +1,72 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class SceneManager : MonoBehaviour
 {
     public int numberOfCubes = 5;
     public List<GameObject> cubes = new List<GameObject>();
+    public int previousSpawnIndex = -1;
+    public int currentSpawnIndex;
+    public TMP_Text scoreText;
+    public int score = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        scoreText.text = "Score :- " + score;
+        StartCoroutine(MakeCubeGlow());
     }
 
     // Update is called once per frame
     void Update()
     {
-        int spawnIndex = Random.Range(0, numberOfCubes);
-        var rend = cubes[spawnIndex].GetComponent<Renderer>();
-        rend.material.color = Color.green;
-        
+        scoreText.text = "Score :- " + score;
+    }
+
+    private IEnumerator MakeCubeGlow()
+    {
+        while(true)
+        {
+            do
+            {
+                currentSpawnIndex = Random.Range(0, numberOfCubes);
+            }
+            while (currentSpawnIndex == previousSpawnIndex);
+            CubeEvent selectedCube = cubes[currentSpawnIndex].GetComponent<CubeEvent>();
+            CubeEvent notSelectedCube;
+            var rend = cubes[currentSpawnIndex].GetComponent<Renderer>();
+            var mat = rend.material;
+            mat.EnableKeyword("_EMISSION");
+            var emissionColor = new Color(0.0f, 10.0f, 0.0f, 1.0f);
+            mat.SetColor("_EmissionColor", emissionColor);
+            float timer = 0.0f;
+            while(timer < 2.0f && !selectedCube.isClicked)
+            {
+                for(int i = 0; i < numberOfCubes; i++)
+                {
+                    if (i != currentSpawnIndex)
+                    {
+                        notSelectedCube = cubes[i].GetComponent<CubeEvent>();
+                        if (notSelectedCube.isClicked)
+                        {
+                            Debug.Log("Non Glown Cube is Clicked !");
+                            score = score - 1;
+                            notSelectedCube.isClicked = false;
+                        }
+                    }
+                }
+                timer += Time.deltaTime;
+                yield return null;
+            }
+            if (selectedCube.isClicked)
+            {
+                Debug.Log("Glown Cube is Clicked !");
+                score = score + 1; 
+                selectedCube.isClicked = false; 
+            }
+            mat.DisableKeyword("_EMISSION");
+            previousSpawnIndex = currentSpawnIndex;
+        }
     }
 }

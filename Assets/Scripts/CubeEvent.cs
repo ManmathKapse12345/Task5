@@ -1,7 +1,8 @@
 using UnityEngine;
 
-public class AnotherScript : MonoBehaviour
+public class CubeEvent : MonoBehaviour
 {
+    public bool isClicked = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -11,6 +12,11 @@ public class AnotherScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+    }
+
+    void OnMouseDown()
+    {
+        isClicked = true;
     }
 }
