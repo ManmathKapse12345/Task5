@@ -10,6 +10,7 @@ public class SceneManager : MonoBehaviour
     public int previousSpawnIndex = -1;
     public int currentSpawnIndex;
     public TMP_Text scoreText;
+    public float timeSlot = 2.0f;
     public int score = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -41,7 +42,7 @@ public class SceneManager : MonoBehaviour
             var emissionColor = new Color(0.0f, 10.0f, 0.0f, 1.0f);
             mat.SetColor("_EmissionColor", emissionColor);
             float timer = 0.0f;
-            while(timer < 2.0f && !selectedCube.isClicked)
+            while(timer < timeSlot && !selectedCube.isClicked)
             {
                 for(int i = 0; i < numberOfCubes; i++)
                 {
@@ -64,6 +65,26 @@ public class SceneManager : MonoBehaviour
                 Debug.Log("Glown Cube is Clicked !");
                 score = score + 1; 
                 selectedCube.isClicked = false; 
+            }
+            if(score >= 40)
+            {
+                timeSlot = 0.4f;
+            }
+            else if(score >= 30)
+            {
+                timeSlot = 0.8f;
+            }
+            else if(score >= 20)
+            {
+                timeSlot = 1.2f;
+            }
+            else if(score >= 10)
+            {
+                timeSlot = 1.6f;
+            }
+            else
+            { 
+                timeSlot = 2.0f;
             }
             mat.DisableKeyword("_EMISSION");
             previousSpawnIndex = currentSpawnIndex;
