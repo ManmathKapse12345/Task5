@@ -39,7 +39,7 @@ public class SceneManager : MonoBehaviour
             var rend = cubes[currentSpawnIndex].GetComponent<Renderer>();
             var mat = rend.material;
             mat.EnableKeyword("_EMISSION");
-            var emissionColor = new Color(0.0f, 10.0f, 0.0f, 1.0f);
+            var emissionColor = Color.green * 20f;
             mat.SetColor("_EmissionColor", emissionColor);
             float timer = 0.0f;
             while(timer < timeSlot && !selectedCube.isClicked)
@@ -86,7 +86,7 @@ public class SceneManager : MonoBehaviour
             { 
                 timeSlot = 2.0f;
             }
-            mat.DisableKeyword("_EMISSION");
+            mat.SetColor("_EmissionColor", Color.black);
             previousSpawnIndex = currentSpawnIndex;
         }
     }
